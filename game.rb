@@ -25,6 +25,35 @@ class Game
     display_question(player, num1, num2)
     gets.chomp
   end
+
+  def updateCurrentPlayer(curr)
+    (curr + 1) % 2
+  end
+
+  def play
+    game = Game.new
+
+players = [Player.new, Player.new]
+
+currentPlayer = 0
+
+loop do
+  questions = Questions.new
+  ans = game.getAnswer(currentPlayer + 1, questions.number1, questions.number2).to_i
+  if !(ans == questions.answer)
+    game.wrong_answer(currentPlayer + 1)
+    players[currentPlayer].wrong_answer
+  else
+    game.right_answer(currentPlayer + 1)
+  end
+  break if players[currentPlayer].score == 0
+  game.show_score(players[0].score, players[1].score)
+  currentPlayer = self.updateCurrentPlayer(currentPlayer)
+end
+
+game.winner(self.updateCurrentPlayer(currentPlayer) + 1, players[updateCurrentPlayer(currentPlayer)].score)
+  end
+
 end
 
 # g = Game.new
